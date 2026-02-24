@@ -1,5 +1,10 @@
 Rails.application.routes.draw do
-  resources "companies"
+  resources "companies" #, only [:index, :show]
+  # 7 rest routes
+  # get sindex
+  # get show
+  # get new
+  # post create
   resources "contacts"
   resources "activities"
   resources "tasks"

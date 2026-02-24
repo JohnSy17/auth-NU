@@ -5,12 +5,24 @@ class SessionsController < ApplicationController
 
   def create
     # authenticate the user
-    # 1. try to find the user by their unique identifier
+    # 1. try to find the user by their unique identifier (email)
+    @user = User.find_by({"email" => params["email"]})
     # 2. if the user exists -> check if they know their password
+    if @user.nil?
+      #4. if the user doesn't exist or they don't know their password -> login fails
+      redirect_to "/login"
+      flash["notice"] = "Wrong email"
+    else 
+      if @user["password"] == params["password"]
+        flash["notice"] = "Welcome."
+        redirect_to "/companies"
+      else 
+        redirect_to "/login"
+        flash["notice"] = "Wrong password"
+      end
+    end
     # 3. if they know their password -> login is successful
     # 4. if the user doesn't exist or they don't know their password -> login fails
-    flash["notice"] = "Welcome."
-    redirect_to "/companies"
   end
 
   def destroy
