@@ -13,7 +13,7 @@ class SessionsController < ApplicationController
       redirect_to "/login"
       flash["notice"] = "Wrong email"
     else 
-      if @user["password"] == params["password"]
+      if BCrypt::Password.new(@user["password"]) == params["password"]
         flash["notice"] = "Welcome."
         redirect_to "/companies"
       else 
