@@ -3,7 +3,7 @@ class SessionsController < ApplicationController
     # render login form in sessions/new.html.erb
   end
 
-  def create
+  def create #add the cookie at the successful path of the create function
     # authenticate the user
     # 1. try to find the user by their unique identifier (email)
     @user = User.find_by({"email" => params["email"]})
@@ -14,6 +14,8 @@ class SessionsController < ApplicationController
       flash["notice"] = "Wrong email"
     else 
       if BCrypt::Password.new(@user["password"]) == params["password"]
+        cookies["zebra"] = "giraffe" # can deposit a cookie in the cookie har
+        session["user_id"] = @user["id"] #encrypts user ID so it is in the session but not saved
         flash["notice"] = "Welcome."
         redirect_to "/companies"
       else 
@@ -27,6 +29,7 @@ class SessionsController < ApplicationController
 
   def destroy
     # logout the user
+    session["user_id"] = nil #sets the session id and then assigns it to nothing
     flash["notice"] = "Goodbye."
     redirect_to "/login"
   end
